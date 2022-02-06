@@ -66,6 +66,18 @@ class GameBoard:
                     self.board[row][column] = '-'
         return None, None
 
+    def corners(self, player):
+        opposingCornersU = [self.board[0][0], self.board[2][2]]
+        opposingCornersD = [self.board[2][0], self.board[0][2]]
+        if opposingCornersU[0] == player and opposingCornersU[1] == '-':
+            return True, opposingCornersU[1]
+        if opposingCornersU[1] == player and opposingCornersU[0] == '-':
+            return True, opposingCornersU[0]
+        if opposingCornersD[0] == player and opposingCornersD[1] == '-':
+            return True, opposingCornersU[1]
+        if opposingCornersD[1] == player and opposingCornersD[0] == '-':
+            return True, opposingCornersU[0]
+
     def testForWin(self):
         # print('testing for win')
         gameOver = False
@@ -120,6 +132,7 @@ def aiMove(board):
     canBlock, blockMoves = board.waysToWin(oppTurn)
     canFork, forkMove = forkBoard.findForks(board.turn)
     canBlockFork, blockForkMove = forkBoard.findForks(oppTurn)
+    corner, cornerMove = board.corners(oppTurn)
 
     if canWin:
         return winningMoves[0]
@@ -131,6 +144,8 @@ def aiMove(board):
         return blockForkMove
     elif board.board[1][1] == '-':
         return ['1', '1']
+    elif corner:
+        return cornerMove
     elif board.board[0][1] == '-':
         return ['0', '1']
     elif board.board[0][2] == '-':
