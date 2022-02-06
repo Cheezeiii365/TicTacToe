@@ -180,7 +180,7 @@ def game():
             print('Game Over.')
             print('==========\n')
             gameBoard.printBoard()
-            print("\nIt's a Tie!!")
+            print("\nIt's a Tie!")
 
         # change player
         if gameBoard.turn == 'X':
