@@ -4,6 +4,7 @@ class GameBoard:
     def __init__(self):
         self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         self.turn = 'X'
+        self.turnCount = 0
 
     def printBoard(self):
         for i in range(3):
@@ -90,6 +91,17 @@ class GameBoard:
                 return True, player
         return None, None
 
+    def validateMove(self, move):
+        if self.board[int(move[0])][int(move[1])] == '-':
+            return True
+
+    def updateBoard(self, move):
+        if self.validateMove(move):
+            self.board[int(move[0])][int(move[1])] = self.turn
+            self.turnCount += 1
+            return True
+        else:
+            return False
 
 
 def aiMove(board):
@@ -136,10 +148,10 @@ def aiMove(board):
         return ['2', '1']
 
 def game():
-    turnCount = 0
     gameBoard = GameBoard()
 
-    for i in range(9):
+    while gameBoard.turnCount < 9:
+        # print(turnCount)
         gameBoard.printBoard()
         print('Its your turn, ', gameBoard.turn, '. Move to which place?' )
 
@@ -148,14 +160,11 @@ def game():
         else:
             move = aiMove(gameBoard)
 
-        if gameBoard.board[int(move[0])][int(move[1])] == '-':
-            gameBoard.board[int(move[0])][int(move[1])] = gameBoard.turn
-            turnCount += 1
-        else:
+        if not gameBoard.updateBoard(move):
             print("That place is already filled.\nMove to which place?")
             continue
 
-        if turnCount > 0:
+        if gameBoard.turnCount > 0:
             gameOver, winner = gameBoard.testForWin()
             # print(gameOver)
             if gameOver:
@@ -166,7 +175,7 @@ def game():
                 print("\n **** " + winner + " won. ****")
                 break
 
-        if turnCount == 9:
+        if gameBoard.turnCount == 9:
             print('\n==========')
             print('Game Over.')
             print('==========\n')
