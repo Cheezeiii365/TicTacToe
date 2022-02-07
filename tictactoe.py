@@ -1,21 +1,39 @@
-# import unittest
-#
-# class TestGameBoard(unittest.TestCase):
-#
-#     def test_corners():
-#         initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
-#         testGame = GameBoard(initBoard)
-#         self.assertEqual(True, testGame.corners())
+import unittest
+
+class TestGameBoard(unittest.TestCase):
+
+    def test_corners():
+        initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
+        testGame = GameBoard(initBoard)
+        self.assertEqual(True, testGame.corners())
 
 
 class GameBoard:
-    def __init__(self, initBoard, initTurn, initTurnCount):
+    def __init__(self, initBoard):
         if initBoard == None:
             self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         else:
             self.board = initBoard
-        self.turn = 'X'
-        self.turnCount = 0
+        if initBoard == None:
+            self.turn = 'X'
+        else:
+            initCountX = 0
+            initCountO = 0
+            for row in range(3):
+                for column in range(3):
+                    if self.board[row][column] == 'X':
+                        initCountX += 1
+                    elif self.board[row][column] == 'O':
+                        initCountO += 1
+            if initCountX == initCountO:
+                self.turn = 'X'
+            else:
+                 self.turn = 'O'
+        if initBoard == None:
+            self.turnCount = 0
+        else:
+            self.turnCount == initCountX + initCountO
+
 
     def intToMove(self, strInputMove):
         inputMove = int(strInputMove)
@@ -256,5 +274,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    # unittest.main()
-    game()
+    unittest.main()
+    # game()
