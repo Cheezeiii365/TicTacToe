@@ -10,11 +10,16 @@ class TestGameBoard(unittest.TestCase):
         expected = (None, None)
         self.assertEqual(actual, expected)
 
-    # def test_corners(self):
-    #     initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
-    #     testGame = GameBoard(initBoard)
-    #     actual = testGame.corners()
-    #     self.assertEqual(actual, expected)
+    def test_corners(self):
+        initBoard = [['-', 'X', '-'], ['-', 'O', '-'], ['X', '-', '-']]
+        testGame = GameBoard(initBoard)
+        if testGame.turn == 'X':
+            oppTurn = 'O'
+        else:
+            oppTurn = 'X'
+        actual = testGame.corners(oppTurn)
+        expected = True, [0, 2]
+        self.assertEqual(actual, expected)
 
 
 class GameBoard:
@@ -127,16 +132,16 @@ class GameBoard:
         return None, None
 
     def corners(self, player):
-        opposingCornersU = [self.board[0][0], self.board[2][2]]
-        opposingCornersD = [self.board[2][0], self.board[0][2]]
+        opposingCornersU = [self.board[2][0], self.board[0][2]]
+        opposingCornersD = [self.board[0][0], self.board[2][2]]
         if opposingCornersU[0] == player and opposingCornersU[1] == '-':
-            return True, opposingCornersU[1]
+            return True, [0, 2]
         elif opposingCornersU[1] == player and opposingCornersU[0] == '-':
-            return True, opposingCornersU[0]
+            return True, [2, 0]
         elif opposingCornersD[0] == player and opposingCornersD[1] == '-':
-            return True, opposingCornersU[1]
+            return True, [2, 2]
         elif opposingCornersD[1] == player and opposingCornersD[0] == '-':
-            return True, opposingCornersU[0]
+            return True, [0, 0]
         else:
             return None, None
 
