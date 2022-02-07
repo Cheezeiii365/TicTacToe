@@ -298,7 +298,7 @@ def game():
                 print('Game Over.')
                 print('==========\n')
                 gameBoard.printBoard()
-                print("\n **** " + winner + " won. ****")
+                print("\n **** " + winner.name+ " won. ****")
                 break
 
         if gameBoard.turnCount == 9:
