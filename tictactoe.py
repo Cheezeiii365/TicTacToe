@@ -302,5 +302,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    unittest.main()
-    # game()
+    # unittest.main()
+    game()
