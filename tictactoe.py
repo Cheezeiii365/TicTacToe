@@ -35,37 +35,38 @@ class Marker(enum.Enum):
     O = 3
 
 class GameBoard:
-    def __init__(self, initBoard):
-        if initBoard == None:
-            theBoard = [['', '', ''], ['', '', ''], ['', '', '']]
-            for row in range(3):
-                for column in range(3):
-                    theBoard[row][column] = Marker.BLANK
-            self.board = theBoard
-        else:
-            self.board = initBoard
-        if initBoard == None:
+    def initNewGameBoard(self, initBoard):
+        theBoard = [['', '', ''], ['', '', ''], ['', '', '']]
+        for row in range(3):
+            for column in range(3):
+                theBoard[row][column] = Marker.BLANK
+
+        self.board = theBoard
+        self.turn = Marker.X
+        self.turnCount = 0
+
+    def initInProgressGame(self, initBoard):
+        self.board = initBoard
+        initCountX = 0
+        initCountO = 0
+        for row in range(3):
+            for column in range(3):
+                if self.board[row][column] == Maker.X:
+                    initCountX += 1
+                elif self.board[row][column] == Marker.O:
+                    initCountO += 1
+        if initCountX == initCountO:
             self.turn = Marker.X
         else:
-            initCountX = 0
-            initCountO = 0
-            for row in range(3):
-                for column in range(3):
-                    if self.board[row][column] == Maker.X:
-                        initCountX += 1
-                    elif self.board[row][column] == Marker.O:
-                        initCountO += 1
-            if initCountX == initCountO:
-                self.turn = Marker.X
-            else:
-                 self.turn = Marker.O
+            self.turn = Marker.O
 
+        self.turnCount = initCountX + initCountO
+
+    def __init__(self, initBoard):
         if initBoard == None:
-            self.turnCount = 0
-            # print(self.turnCount)
+            self.initNewGameBoard(initBoard)
         else:
-            self.turnCount = initCountX + initCountO
-            # print(self.turnCount)
+            self.initInProgressGame(initBoard)
 
     def intToMove(self, strInputMove):
         inputMove = int(strInputMove)
