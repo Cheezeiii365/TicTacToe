@@ -1,12 +1,12 @@
-# gameBoard = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
-import unittest
+# import unittest
+#
+# class TestGameBoard(unittest.TestCase):
+#
+#     def test_corners():
+#         initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
+#         testGame = GameBoard(initBoard)
+#         self.assertEqual(True, testGame.corners())
 
-class TestGameBoard(unittest.TestCase):
-
-    def test_corners():
-        initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
-        testGame = GameBoard(initBoard)
-        testGame.corners(testGame.turn)
 
 class GameBoard:
     def __init__(self, initBoard):
@@ -14,7 +14,7 @@ class GameBoard:
             self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         else:
             self.board = initBoard
-        self.turn = 'X'
+        self.turn = 'O'
         self.turnCount = 0
 
     def printBoard(self):
@@ -220,5 +220,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    unittest.main()
-    # game()
+    # unittest.main()
+    game()
