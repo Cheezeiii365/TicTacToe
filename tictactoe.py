@@ -3,28 +3,40 @@ import enum
 
 class TestGameBoard(unittest.TestCase):
 
+    def convertToMarker(self, initBoard):
+        theBoard = [['', '', ''], ['', '', ''], ['', '', '']]
+        for row in range(3):
+            for column in range(3):
+                if initBoard[row][column] == '-':
+                    theBoard[row][column] = Marker.BLANK
+                elif initBoard[row][column] == 'X':
+                    theBoard[row][column] = Marker.X
+                elif initBoard[row][column] == 'O':
+                    theBoard[row][column] = Marker.O
+        return theBoard
+
     def test_waysToWin(self):
-        initBoard = [['X', '-', '-'], ['X', 'O', '-'], ['-', '-', '-']]
-        testGame = GameBoard(initBoard)
+        initBoard = [['X', '-', '-'], ['X', 'O', 'O'], ['-', '-', '-']]
+        testGame = GameBoard(self.convertToMarker(initBoard))
         actual = testGame.waysToWin(testGame.turn)
         # expected = (True, [[2, 0]])
-        expected = (None, None)
+        expected = (True, [[2, 0]])
         self.assertEqual(actual, expected)
 
     def test_corners(self):
         initBoard = [['-', 'X', '-'], ['-', 'O', '-'], ['X', '-', '-']]
-        testGame = GameBoard(initBoard)
-        if testGame.turn == 'X':
-            oppTurn = 'O'
+        testGame = GameBoard(self.convertToMarker(initBoard))
+        if testGame.turn == Marker.O:
+            oppTurn = Marker.O
         else:
-            oppTurn = 'X'
+            oppTurn = Marker.x
         actual = testGame.corners(oppTurn)
         expected = True, [0, 2]
         self.assertEqual(actual, expected)
 
     def test_aiMove(self):
         initBoard = [['-', 'X', '-'], ['-', '-', '-'], ['-', '-', '-']]
-        testGame = GameBoard(initBoard)
+        testGame = GameBoard(self.convertToMarker(initBoard))
         actual = aiMove(testGame)
         expected = ['1', '1']
         self.assertEqual(actual, expected)
@@ -51,7 +63,7 @@ class GameBoard:
         initCountO = 0
         for row in range(3):
             for column in range(3):
-                if self.board[row][column] == Maker.X:
+                if self.board[row][column] == Marker.X:
                     initCountX += 1
                 elif self.board[row][column] == Marker.O:
                     initCountO += 1
@@ -59,7 +71,6 @@ class GameBoard:
             self.turn = Marker.X
         else:
             self.turn = Marker.O
-
         self.turnCount = initCountX + initCountO
 
     def __init__(self, initBoard):
@@ -159,6 +170,7 @@ class GameBoard:
     def corners(self, player):
         opposingCornersU = [self.board[2][0], self.board[0][2]]
         opposingCornersD = [self.board[0][0], self.board[2][2]]
+        print(opposingCornersU)
         if opposingCornersU[0] == player and opposingCornersU[1] == Marker.BLANK:
             return True, [0, 2]
         elif opposingCornersU[1] == player and opposingCornersU[0] == Marker.BLANK:
