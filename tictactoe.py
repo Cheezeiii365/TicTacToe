@@ -203,21 +203,21 @@ def aiMove(board):
     # print(corner, cornerMove)
 
     if canWin:
-        print('winning')
+        print('Winning')
         return winningMoves[0]
     elif canBlock:
-        print('blocking')
+        print('Blocking')
         return blockMoves[0]
     elif canFork:
-        print('forking')
+        print('Forking')
         return forkMove
     elif canBlockFork:
-        print('blocking fork')
+        print('Blocking fork')
         return blockForkMove
     elif board.board[1][1] == '-':
         return ['1', '1']
     elif corner:
-        print('opposite corner')
+        print('Opposite corner')
         return cornerMove
     elif board.board[0][1] == '-':
         return ['0', '1']
