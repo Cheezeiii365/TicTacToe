@@ -14,8 +14,29 @@ class GameBoard:
             self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         else:
             self.board = initBoard
-        self.turn = 'O'
+        self.turn = 'X'
         self.turnCount = 0
+
+    def intToMove(self, strInputMove):
+        inputMove = int(strInputMove)
+        if inputMove == 1:
+            return ['2', '0']
+        elif inputMove == 2:
+            return ['2', '1']
+        elif inputMove == 3:
+            return ['2', '2']
+        elif inputMove == 4:
+            return ['1', '0']
+        elif inputMove == 5:
+            return ['1', '1']
+        elif inputMove == 6:
+            return ['1', '2']
+        elif inputMove == 7:
+            return ['0', '0']
+        elif inputMove == 8:
+            return ['0', '1']
+        elif inputMove == 9:
+            return ['0', '2']
 
     def printBoard(self):
         for i in range(3):
@@ -81,12 +102,14 @@ class GameBoard:
         opposingCornersD = [self.board[2][0], self.board[0][2]]
         if opposingCornersU[0] == player and opposingCornersU[1] == '-':
             return True, opposingCornersU[1]
-        if opposingCornersU[1] == player and opposingCornersU[0] == '-':
+        elif opposingCornersU[1] == player and opposingCornersU[0] == '-':
             return True, opposingCornersU[0]
-        if opposingCornersD[0] == player and opposingCornersD[1] == '-':
+        elif opposingCornersD[0] == player and opposingCornersD[1] == '-':
             return True, opposingCornersU[1]
-        if opposingCornersD[1] == player and opposingCornersD[0] == '-':
+        elif opposingCornersD[1] == player and opposingCornersD[0] == '-':
             return True, opposingCornersU[0]
+        else:
+            return None, None
 
     def testForWin(self):
         # print('testing for win')
@@ -142,7 +165,8 @@ def aiMove(board):
     canBlock, blockMoves = board.waysToWin(oppTurn)
     canFork, forkMove = forkBoard.findForks(board.turn)
     canBlockFork, blockForkMove = forkBoard.findForks(oppTurn)
-    corner, cornerMove = board.corners(oppTurn)
+    # corner, cornerMove = board.corners(oppTurn)
+    # print(corner, cornerMove)
 
     if canWin:
         return winningMoves[0]
@@ -154,8 +178,8 @@ def aiMove(board):
         return blockForkMove
     elif board.board[1][1] == '-':
         return ['1', '1']
-    elif corner:
-        return cornerMove
+    # elif corner:
+    #     return cornerMove
     elif board.board[0][1] == '-':
         return ['0', '1']
     elif board.board[0][2] == '-':
@@ -176,13 +200,25 @@ def aiMove(board):
 def game():
     gameBoard = GameBoard(None)
 
+    # intro
+    print('\n===============================')
+    print('TicTacToe play against computer')
+    print('===============================\n')
+    print('Board indexes:')
+    print('7 8 9')
+    print('4 5 6')
+    print('1 2 3')
+    print('\n')
+
+    # game
     while gameBoard.turnCount < 9:
         # print(turnCount)
         gameBoard.printBoard()
         print('Its your turn, ', gameBoard.turn, '. Move to which place?' )
 
         if gameBoard.turn == 'X':
-            move = [char for char in input()]
+            playerMove = input()
+            move = gameBoard.intToMove(playerMove)
         else:
             move = aiMove(gameBoard)
 
