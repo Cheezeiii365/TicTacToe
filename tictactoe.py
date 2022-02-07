@@ -21,6 +21,13 @@ class TestGameBoard(unittest.TestCase):
         expected = True, [0, 2]
         self.assertEqual(actual, expected)
 
+    def test_aiMove(self):
+        initBoard = [['-', 'X', '-'], ['-', '-', '-'], ['-', '-', '-']]
+        testGame = GameBoard(initBoard)
+        actual = aiMove(testGame)
+        expected = ['1', '1']
+        self.assertEqual(actual, expected)
+
 
 class GameBoard:
     def __init__(self, initBoard):
@@ -295,5 +302,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    # unittest.main()
-    game()
+    unittest.main()
+    # game()
