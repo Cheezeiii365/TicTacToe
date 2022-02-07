@@ -2,10 +2,18 @@ import unittest
 
 class TestGameBoard(unittest.TestCase):
 
-    def test_corners():
-        initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
+    def test_waysToWin(self):
+        initBoard = [['X', '-', '-'], ['X', 'O', 'O'], ['-', '-', '-']]
         testGame = GameBoard(initBoard)
-        self.assertEqual(True, testGame.corners())
+        actual = testGame.waysToWin(testGame.turn)
+        expected = (True, ['2', '0'])
+        self.assertEqual(actual, expected)
+
+    # def test_corners(self):
+    #     initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
+    #     testGame = GameBoard(initBoard)
+    #     actual = testGame.corners()
+    #     self.assertEqual(actual, expected)
 
 
 class GameBoard:
@@ -33,7 +41,6 @@ class GameBoard:
             self.turnCount = 0
         else:
             self.turnCount == initCountX + initCountO
-
 
     def intToMove(self, strInputMove):
         inputMove = int(strInputMove)
@@ -183,7 +190,7 @@ def aiMove(board):
     canBlock, blockMoves = board.waysToWin(oppTurn)
     canFork, forkMove = forkBoard.findForks(board.turn)
     canBlockFork, blockForkMove = forkBoard.findForks(oppTurn)
-    # corner, cornerMove = board.corners(oppTurn)
+    corner, cornerMove = board.corners(oppTurn)
     # print(corner, cornerMove)
 
     if canWin:
@@ -196,8 +203,8 @@ def aiMove(board):
         return blockForkMove
     elif board.board[1][1] == '-':
         return ['1', '1']
-    # elif corner:
-    #     return cornerMove
+    elif corner:
+        return cornerMove
     elif board.board[0][1] == '-':
         return ['0', '1']
     elif board.board[0][2] == '-':
@@ -274,5 +281,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    unittest.main()
-    # game()
+    # unittest.main()
+    game()
