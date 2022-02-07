@@ -3,10 +3,11 @@ import unittest
 class TestGameBoard(unittest.TestCase):
 
     def test_waysToWin(self):
-        initBoard = [['X', '-', '-'], ['X', 'O', 'O'], ['-', '-', '-']]
+        initBoard = [['X', '-', '-'], ['X', 'O', '-'], ['-', '-', '-']]
         testGame = GameBoard(initBoard)
         actual = testGame.waysToWin(testGame.turn)
-        expected = (True, ['2', '0'])
+        # expected = (True, [[2, 0]])
+        expected = (None, None)
         self.assertEqual(actual, expected)
 
     # def test_corners(self):
@@ -37,10 +38,13 @@ class GameBoard:
                 self.turn = 'X'
             else:
                  self.turn = 'O'
+
         if initBoard == None:
             self.turnCount = 0
+            print(self.turnCount)
         else:
-            self.turnCount == initCountX + initCountO
+            self.turnCount = initCountX + initCountO
+            print(self.turnCount)
 
     def intToMove(self, strInputMove):
         inputMove = int(strInputMove)
@@ -100,7 +104,7 @@ class GameBoard:
             return True, winningMoves
 
         else:
-            return None, winningMoves
+            return None, None
 
     def findForks(self, player):
         # print('finding forks')
@@ -281,5 +285,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    # unittest.main()
-    game()
+    unittest.main()
+    # game()
