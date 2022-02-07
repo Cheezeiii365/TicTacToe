@@ -46,10 +46,10 @@ class GameBoard:
 
         if initBoard == None:
             self.turnCount = 0
-            print(self.turnCount)
+            # print(self.turnCount)
         else:
             self.turnCount = initCountX + initCountO
-            print(self.turnCount)
+            # print(self.turnCount)
 
     def intToMove(self, strInputMove):
         inputMove = int(strInputMove)
@@ -203,16 +203,21 @@ def aiMove(board):
     # print(corner, cornerMove)
 
     if canWin:
+        print('winning')
         return winningMoves[0]
     elif canBlock:
+        print('blocking')
         return blockMoves[0]
     elif canFork:
+        print('forking')
         return forkMove
     elif canBlockFork:
+        print('blocking fork')
         return blockForkMove
     elif board.board[1][1] == '-':
         return ['1', '1']
     elif corner:
+        print('opposite corner')
         return cornerMove
     elif board.board[0][1] == '-':
         return ['0', '1']
