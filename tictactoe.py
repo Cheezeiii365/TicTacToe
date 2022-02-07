@@ -28,6 +28,9 @@ class TestGameBoard(unittest.TestCase):
         expected = ['1', '1']
         self.assertEqual(actual, expected)
 
+class Marker(enum.Enum):
+    X = 1
+    O = 2
 
 class GameBoard:
     def __init__(self, initBoard):
