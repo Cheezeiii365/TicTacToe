@@ -1,4 +1,5 @@
 import unittest
+import enum
 
 class TestGameBoard(unittest.TestCase):
 
@@ -29,30 +30,35 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(actual, expected)
 
 class Marker(enum.Enum):
-    X = 1
-    O = 2
+    BLANK = 1
+    X = 2
+    O = 3
 
 class GameBoard:
     def __init__(self, initBoard):
         if initBoard == None:
-            self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+            theBoard = [['', '', ''], ['', '', ''], ['', '', '']]
+            for row in range(3):
+                for column in range(3):
+                    theBoard[row][column] = Marker.BLANK
+            self.board = theBoard
         else:
             self.board = initBoard
         if initBoard == None:
-            self.turn = 'X'
+            self.turn = Marker.X
         else:
             initCountX = 0
             initCountO = 0
             for row in range(3):
                 for column in range(3):
-                    if self.board[row][column] == 'X':
+                    if self.board[row][column] == Maker.X:
                         initCountX += 1
-                    elif self.board[row][column] == 'O':
+                    elif self.board[row][column] == Marker.O:
                         initCountO += 1
             if initCountX == initCountO:
-                self.turn = 'X'
+                self.turn = Marker.X
             else:
-                 self.turn = 'O'
+                 self.turn = Marker.O
 
         if initBoard == None:
             self.turnCount = 0
@@ -82,22 +88,30 @@ class GameBoard:
         elif inputMove == 9:
             return ['0', '2']
 
+    def printOutConverter(self, mark):
+        if mark == Marker.BLANK:
+            return '-'
+        elif mark == Marker.X:
+            return 'X'
+        elif mark == Marker.O:
+            return 'O'
+
     def printBoard(self):
         for i in range(3):
-            print(self.board[i][0], self.board[i][1], self.board[i][2])
+            print(self.printOutConverter(self.board[i][0]), self.printOutConverter(self.board[i][1]), self.printOutConverter(self.board[i][2]))
 
     def waysToWin(self, player):
         # print('in ways to win')
         winningMoves = []
         diagU = [self.board[0][2], self.board[1][1], self.board[2][0]]
         diagD = [self.board[0][0], self.board[1][1], self.board[2][2]]
-        if diagD.count(player) == 2 and diagD.count('-') == 1:
+        if diagD.count(player) == 2 and diagD.count(Marker.BLANK) == 1:
             for cell in range(3):
-                if diagD[cell] == '-':
+                if diagD[cell] == Marker.BLANK:
                     winningMoves.append([cell, cell])
-        if diagU.count(player) == 2 and diagU.count('-') == 1:
+        if diagU.count(player) == 2 and diagU.count(Marker.BLANK) == 1:
             for cell in range(3):
-                if diagU[cell] == '-':
+                if diagU[cell] == Marker.BLANK:
                     winningMoves.append([cell, (2 - cell)])
         for i in range(3):
             row = self.board[i]
@@ -105,13 +119,13 @@ class GameBoard:
             # print('P:', row.count(player), ' -: ', row.count('-'))
             # print(i, ' ', row, ' ',column)
             # print(self.board)
-            if row.count(player) == 2 and row.count('-') == 1:
+            if row.count(player) == 2 and row.count(Marker.BLANK) == 1:
                 for cell in range(3):
-                    if row[cell] == '-':
+                    if row[cell] == Marker.BLANK:
                         winningMoves.append([i, cell])
-            if column.count(player) == 2 and column.count('-') == 1:
+            if column.count(player) == 2 and column.count(Marker.BLANK) == 1:
                 for cell in range(3):
-                    if column[cell] == '-':
+                    if column[cell] == Marker.BLANK:
                         winningMoves.append([cell, i])
         # print(winningMoves)
         # print(player)
@@ -125,7 +139,7 @@ class GameBoard:
         # print('finding forks')
         for row in range(3):
             for column in range(3):
-                if self.board[row][column] == '-':
+                if self.board[row][column] == Marker.BLANK:
                     self.board[row][column] = player
                     canWin, winningMoves = self.waysToWin(player)
                     forkMove = [row, column]
@@ -135,22 +149,22 @@ class GameBoard:
                 if canWin and len(winningMoves) == 2:
                     # print(winningMoves)
                     # print(forkMove)
-                    self.board[row][column] = '-'
+                    self.board[row][column] = Marker.BLANK
                     return True, forkMove
                 else:
-                    self.board[row][column] = '-'
+                    self.board[row][column] = Marker.BLANK
         return None, None
 
     def corners(self, player):
         opposingCornersU = [self.board[2][0], self.board[0][2]]
         opposingCornersD = [self.board[0][0], self.board[2][2]]
-        if opposingCornersU[0] == player and opposingCornersU[1] == '-':
+        if opposingCornersU[0] == player and opposingCornersU[1] == Marker.BLANK:
             return True, [0, 2]
-        elif opposingCornersU[1] == player and opposingCornersU[0] == '-':
+        elif opposingCornersU[1] == player and opposingCornersU[0] == Marker.BLANK:
             return True, [2, 0]
-        elif opposingCornersD[0] == player and opposingCornersD[1] == '-':
+        elif opposingCornersD[0] == player and opposingCornersD[1] == Marker.BLANK:
             return True, [2, 2]
-        elif opposingCornersD[1] == player and opposingCornersD[0] == '-':
+        elif opposingCornersD[1] == player and opposingCornersD[0] == Marker.BLANK:
             return True, [0, 0]
         else:
             return None, None
@@ -160,9 +174,9 @@ class GameBoard:
         gameOver = False
         for players in range(2):
             if players == 0:
-                player = 'X'
+                player = Marker.X
             else:
-                player = 'O'
+                player = Marker.O
             # print(gameOver, players, player)
             diagU = [self.board[0][2], self.board[1][1], self.board[2][0]]
             diagD = [self.board[0][0], self.board[1][1], self.board[2][2]]
@@ -182,7 +196,7 @@ class GameBoard:
         return None, None
 
     def validateMove(self, move):
-        if self.board[int(move[0])][int(move[1])] == '-':
+        if self.board[int(move[0])][int(move[1])] == Marker.BLANK:
             return True
 
     def updateBoard(self, move):
@@ -195,10 +209,10 @@ class GameBoard:
 
 
 def aiMove(board):
-    if board.turn == 'X':
-        oppTurn = 'O'
+    if board.turn == Marker.X:
+        oppTurn = Marker.O
     else:
-        oppTurn = 'X'
+        oppTurn = Marker.X
 
     # moveBoard = GameBoard()
     # oppMoveBoard = GameBoard()
@@ -224,26 +238,26 @@ def aiMove(board):
     elif canBlockFork:
         # print('Blocking fork')
         return blockForkMove
-    elif board.board[1][1] == '-':
+    elif board.board[1][1] == Marker.BLANK:
         return ['1', '1']
     elif corner:
         # print('Opposite corner')
         return cornerMove
-    elif board.board[0][1] == '-':
+    elif board.board[0][1] == Marker.BLANK:
         return ['0', '1']
-    elif board.board[0][2] == '-':
+    elif board.board[0][2] == Marker.BLANK:
         return ['0', '2']
-    elif board.board[2][0] == '-':
+    elif board.board[2][0] == Marker.BLANK:
         return ['2', '0']
-    elif board.board[2][2] == '-':
+    elif board.board[2][2] == Marker.BLANK:
         return ['2', '2']
-    elif board.board[0][1] == '-':
+    elif board.board[0][1] == Marker.BLANK:
         return ['0', '1']
-    elif board.board[1][0] == '-':
+    elif board.board[1][0] == Marker.BLANK:
         return ['1', '0']
-    elif board.board[1][2] == '-':
+    elif board.board[1][2] == Marker.BLANK:
         return ['1', '2']
-    elif board.board[2][1] == '-':
+    elif board.board[2][1] == Marker.BLANK:
         return ['2', '1']
 
 def game():
@@ -263,9 +277,9 @@ def game():
     while gameBoard.turnCount < 9:
         # print(turnCount)
         gameBoard.printBoard()
-        print('Its your turn, ', gameBoard.turn, '. Move to which place?' )
+        print('Its your turn, ', gameBoard.printOutConverter(gameBoard.turn), '. Move to which place?' )
 
-        if gameBoard.turn == 'X':
+        if gameBoard.turn == Marker.X:
             playerMove = input()
             move = gameBoard.intToMove(playerMove)
         else:
@@ -294,11 +308,11 @@ def game():
             print("\nIt's a Tie!")
 
         # change player
-        if gameBoard.turn == 'X':
-            gameBoard.turn = 'O'
+        if gameBoard.turn == Marker.X:
+            gameBoard.turn = Marker.O
             # notTurn = 'X'
         else:
-            gameBoard.turn = 'X'
+            gameBoard.turn = Marker.X
             # notTurn = 'O'
 
 
