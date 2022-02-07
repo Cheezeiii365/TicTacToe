@@ -1,9 +1,19 @@
 # gameBoard = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
 import unittest
 
+class TestGameBoard(unittest.TestCase):
+
+    def test_corners():
+        initBoard = [['-', '-', 'X'], ['X', 'O', '-'], ['-', '-', '-']]
+        testGame = GameBoard(initBoard)
+        testGame.corners(testGame.turn)
+
 class GameBoard:
-    def __init__(self):
-        self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+    def __init__(self, initBoard):
+        if initBoard == None:
+            self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+        else:
+            self.board = initBoard
         self.turn = 'X'
         self.turnCount = 0
 
@@ -125,7 +135,7 @@ def aiMove(board):
 
     # moveBoard = GameBoard()
     # oppMoveBoard = GameBoard()
-    forkBoard = GameBoard()
+    forkBoard = GameBoard(None)
     forkBoard = board
 
     canWin, winningMoves = board.waysToWin(board.turn)
@@ -164,7 +174,7 @@ def aiMove(board):
         return ['2', '1']
 
 def game():
-    gameBoard = GameBoard()
+    gameBoard = GameBoard(None)
 
     while gameBoard.turnCount < 9:
         # print(turnCount)
@@ -205,5 +215,10 @@ def game():
         else:
             gameBoard.turn = 'X'
             # notTurn = 'O'
+
+
+
+# Start
 if __name__ == '__main__':
-    game()
+    unittest.main()
+    # game()
