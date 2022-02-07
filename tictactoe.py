@@ -9,7 +9,7 @@
 
 
 class GameBoard:
-    def __init__(self, initBoard):
+    def __init__(self, initBoard, initTurn, initTurnCount):
         if initBoard == None:
             self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         else:
