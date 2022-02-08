@@ -170,9 +170,10 @@ class GameBoard:
         return None, None
 
     def corners(self, player):
+        print('**', self.board[2][0])
         opposingCornersU = [self.board[2][0], self.board[0][2]]
         opposingCornersD = [self.board[0][0], self.board[2][2]]
-        # print(opposingCornersU)
+        print('*', self.board[2][0])
         if opposingCornersU[0] == player and opposingCornersU[1] == Marker.BLANK:
             return True, [0, 2]
         elif opposingCornersU[1] == player and opposingCornersU[0] == Marker.BLANK:
@@ -334,5 +335,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    # unittest.main()
-    game()
+    unittest.main()
+    # game()
