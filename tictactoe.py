@@ -24,7 +24,9 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_corners(self):
-        initBoard = [['-', 'X', '-'], ['-', 'O', '-'], ['X', '-', '-']]
+        initBoard = [['-', 'X', '-'],
+                    ['-', 'O', '-'],
+                    ['X', '-', '-']]
         testGame = GameBoard(self.convertToMarker(initBoard))
         if testGame.turn == Marker.O:
             oppTurn = Marker.O
@@ -170,7 +172,7 @@ class GameBoard:
     def corners(self, player):
         opposingCornersU = [self.board[2][0], self.board[0][2]]
         opposingCornersD = [self.board[0][0], self.board[2][2]]
-        print(opposingCornersU)
+        # print(opposingCornersU)
         if opposingCornersU[0] == player and opposingCornersU[1] == Marker.BLANK:
             return True, [0, 2]
         elif opposingCornersU[1] == player and opposingCornersU[0] == Marker.BLANK:
