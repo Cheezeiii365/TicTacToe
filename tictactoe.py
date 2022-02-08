@@ -1,48 +1,6 @@
 import unittest
 import enum
 
-class TestGameBoard(unittest.TestCase):
-
-    def convertToMarker(self, initBoard):
-        theBoard = [['', '', ''], ['', '', ''], ['', '', '']]
-        for row in range(3):
-            for column in range(3):
-                if initBoard[row][column] == '-':
-                    theBoard[row][column] = Marker.BLANK
-                elif initBoard[row][column] == 'X':
-                    theBoard[row][column] = Marker.X
-                elif initBoard[row][column] == 'O':
-                    theBoard[row][column] = Marker.O
-        return theBoard
-
-    def test_waysToWin(self):
-        initBoard = [['X', '-', '-'], ['X', 'O', 'O'], ['-', '-', '-']]
-        testGame = GameBoard(self.convertToMarker(initBoard))
-        actual = testGame.waysToWin(testGame.turn)
-        # expected = (True, [[2, 0]])
-        expected = (True, [[2, 0]])
-        self.assertEqual(actual, expected)
-
-    def test_corners(self):
-        initBoard = [['-', 'X', '-'],
-                    ['-', 'O', '-'],
-                    ['X', '-', '-']]
-        testGame = GameBoard(self.convertToMarker(initBoard))
-        if testGame.turn == Marker.O:
-            oppTurn = Marker.O
-        else:
-            oppTurn = Marker.x
-        actual = testGame.corners(oppTurn)
-        expected = True, [0, 2]
-        self.assertEqual(actual, expected)
-
-    def test_aiMove(self):
-        initBoard = [['-', 'X', '-'], ['-', '-', '-'], ['-', '-', '-']]
-        testGame = GameBoard(self.convertToMarker(initBoard))
-        actual = aiMove(testGame)
-        expected = ['1', '1']
-        self.assertEqual(actual, expected)
-
 class Marker(enum.Enum):
     BLANK = 1
     X = 2
@@ -151,18 +109,30 @@ class GameBoard:
 
     def findForks(self, player):
         # print('finding forks')
+        forkMove = []
         for row in range(3):
             for column in range(3):
                 if self.board[row][column] == Marker.BLANK:
                     self.board[row][column] = player
+                    print('-++-++ New Cell ++-++-')
+                    print('-++-++ ', [row, column], ' ++-++-')
+                    print('*====*')
+                    self.printBoard()
+                    print('-----')
+                    print('** Can Win, Winning Moves')
                     canWin, winningMoves = self.waysToWin(player)
+                    print(canWin, winningMoves)
+                    # forkMove.append([row, column])
                     forkMove = [row, column]
+                    print('** Fork Move')
+                    print(forkMove)
+                    print('*====*')
                 else:
                     # self.board[row][column] = '-'
                     continue
                 if canWin and len(winningMoves) == 2:
-                    # print(winningMoves)
-                    # print(forkMove)
+                    print(winningMoves)
+                    print(forkMove)
                     self.board[row][column] = Marker.BLANK
                     return True, forkMove
                 else:
@@ -170,10 +140,10 @@ class GameBoard:
         return None, None
 
     def corners(self, player):
-        print('**', self.board[2][0])
+        # print('**', self.board[2][0])
         opposingCornersU = [self.board[2][0], self.board[0][2]]
         opposingCornersD = [self.board[0][0], self.board[2][2]]
-        print('*', self.board[2][0])
+        # print('*', self.board[2][0])
         if opposingCornersU[0] == player and opposingCornersU[1] == Marker.BLANK:
             return True, [0, 2]
         elif opposingCornersU[1] == player and opposingCornersU[0] == Marker.BLANK:
@@ -243,21 +213,21 @@ def aiMove(board):
     # print(corner, cornerMove)
 
     if canWin:
-        # print('Winning')
+        print('Winning')
         return winningMoves[0]
     elif canBlock:
-        # print('Blocking')
+        print('Blocking')
         return blockMoves[0]
     elif canFork:
-        # print('Forking')
+        print('Forking')
         return forkMove
     elif canBlockFork:
-        # print('Blocking fork')
+        print('Blocking fork')
         return blockForkMove
     elif board.board[1][1] == Marker.BLANK:
         return ['1', '1']
     elif corner:
-        # print('Opposite corner')
+        print('Opposite corner')
         return cornerMove
     elif board.board[0][1] == Marker.BLANK:
         return ['0', '1']
@@ -335,5 +305,5 @@ def game():
 
 # Start
 if __name__ == '__main__':
-    unittest.main()
-    # game()
+    # unittest.main()
+    game()
